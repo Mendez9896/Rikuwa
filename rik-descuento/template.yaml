@@ -2,9 +2,6 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform:
   - AWS::Serverless-2016-10-31
 
-Parameters:
-  Project: 
-    Type: String
 
 Description: rik-descuento
 Resources:
@@ -111,6 +108,22 @@ Resources:
           Properties:
             RestApiId: !Ref MyAPI
             Path: /descuento
+            Method: GET
+            
+  SeasonLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: rik-season-lambda
+      Runtime: python3.6
+      CodeUri: ./build
+      Handler: rik-season.handler
+      Role: !GetAtt MyLambdaRole.Arn
+      Events:
+        GetUsers:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyAPI
+            Path: /season
             Method: GET
 
 Outputs:
