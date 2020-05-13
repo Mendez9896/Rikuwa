@@ -3,12 +3,15 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import datetime
+import uuid
 
 def handler(event, context):
-    pk = "pk-02"
-    sk= "pk-02"
-    package_id = "pk-02"
-    count = 2
+    idp1 = uuid.uuid1()
+    idp = str(idp1)
+    pk = idp
+    sk= idp
+    package_id = idp
+    count = 5
     customer = event['customer']
     date1 = datetime.date.today()
     date = date1.strftime('%m/%d/%Y')
@@ -22,9 +25,16 @@ def handler(event, context):
     mail = event['mail']
     status = "registering"
     
-    
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
+    
+    object_key = event['customer']
+    response = table.query(
+        KeyConditionExpression=Key('curstomer').begins_with(customer)
+    )
+    l = len(response['Items'])
+    
+    
     response2 = table.put_item(
         Item={
             "pk": pk,

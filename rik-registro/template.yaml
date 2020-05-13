@@ -112,3 +112,6 @@ Outputs:
   ProdDataEndpoint:
     Description: "API Prod stage endpoint, write in line 7"
     Value: !Sub "https://${MyAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/users"
+  WebsiteURL:
+    Value: !GetAtt [MyBucket, WebsiteURL]
+    Description: URL for website hosted on S3

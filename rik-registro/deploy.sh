@@ -61,6 +61,8 @@ aws cloudformation deploy \
   --parameter-overrides Project=cf_lab2  \
   --stack-name "rik-register" \
   --capabilities CAPABILITY_NAMED_IAM
+  
+aws s3 cp src/index.html s3://rikuwa-register-package/index.html --acl public-read-write
 fi
 
 if [[ $r -eq 1 ]]; then
