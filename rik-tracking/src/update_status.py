@@ -6,6 +6,7 @@ status_list = ['registering', 'checkout', 'packaging', 'embarking', 'enroute', '
 
 def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
+    sns = boto3.client('sns')
     table = dynamodb.Table('fedex')
     package_id = event['queryStringParameters']['package_id']
     
@@ -33,6 +34,30 @@ def handler(event, context):
             'statusCode': 200,
             'body': json.dumps(package)
         }
+        
+    if package_status == 'registering':
+        topic = sns.create_topic(
+            Name= f"{package_id}-topic"
+        )
+        subs_arn = sns.subscribe(
+            TopicArn = topic['TopicArn'],
+            Protocol= 'Email',
+            Endpoint= package['email'],
+            ReturnSubscriptionArn=True
+        )
+        table.update_item(
+            Key={
+                'pk': package_id,
+                'sk': package_id
+            },
+            UpdateExpression="set topic_arn = :a",
+            ExpressionAttributeValues={
+                ':a': topic['TopicArn']
+            },
+            ReturnValues="UPDATED_NEW"
+        )
+        
+        
     
     if package_status == 'enroute' and package['stop'] == 'true':
         new_status = 'embarking'
@@ -53,8 +78,22 @@ def handler(event, context):
         },
         ReturnValues="UPDATED_NEW"
     )
+    
+    if package_status == 'registering':
+        topic_arn = topic['TopicArn']
+    else:
+        topic_arn = package['topic_arn']
+        
+    sns.publish(
+        TopicArn=topic_arn,
+        Message=f"Su paquete con codigo {package_id} se actualiza al estado: '{new_status}'",
+        Subject='Fedex'
+    )
+    
+    
     package['package_status'] = new_status
     package['stop'] = stop
+    package['topic_arn'] = topic_arn
     
     return {
             'statusCode': 200,
