@@ -27,7 +27,8 @@ paths:
               "dimension": $input.json('$.dimension'),
               "origin": $input.json('$.origin'),
               "typeB": $input.json('$.typeB'),
-              "weight": $input.json('$.weight')
+              "weight": $input.json('$.weight'),
+              "mail": $input.json('$.mail')
             }
         responses:
           default:

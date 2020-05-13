@@ -18,6 +18,8 @@ def handler(event, context):
     typeB = event['typeB']
     weight1 = event['weight']
     weight = int(weight1)
+    mail = event['mail']
+    status = "registering"
     
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
@@ -32,7 +34,9 @@ def handler(event, context):
             "dimension": dimension,
             "origin": origin,
             "type": typeB,
-            "weight": weight
+            "weight": weight,
+            "mail": mail,
+            "status": status
         }    
     )
     
