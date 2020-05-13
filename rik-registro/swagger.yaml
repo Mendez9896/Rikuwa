@@ -1,12 +1,14 @@
 openapi: 3.0.0
 
-
 paths:
   /users:
     post:
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       responses:
         200:
-          description: Default response for CORS method
           headers:
             Access-Control-Allow-Origin:
               schema:
@@ -15,21 +17,18 @@ paths:
       x-amazon-apigateway-integration:
         type: "aws"
         uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:register/invocations"
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:rik-register-package/invocations"
         httpMethod: "POST"
         requestTemplates:
           application/json: |
             {
-                "count": $input.json('$.count'),
-                "curstomer": $input.json('$.curstomer'),
-                "date": $input.json('$.date'),
-                "destination": $input.json('$.destination'),
-                "dimension": $input.json('$.dimension'),
-                "origin": $input.json('$.origin'),
-                "pk": $input.json('$.pk'),
-                "sk": $input.json('$.sk'),
-                "type": $input.json('$.type'),
-                "weight": $input.json('$.weight')
+              "customer": $input.json('$.customer'),
+              "destination": $input.json('$.destination'),
+              "dimension": $input.json('$.dimension'),
+              "origin": $input.json('$.origin'),
+              "typeB": $input.json('$.typeB'),
+              "weight": $input.json('$.weight'),
+              "mail": $input.json('$.mail')
             }
         responses:
           default:
@@ -39,44 +38,36 @@ paths:
             responseTemplates:
               application/json: |
                 {}
-        
-  options:
-    summary: CORS support
-    description: |
-      Enable CORS by returning correct headers
-    tags:
-    - CORS
-    responses:
-      200:
-        description: Default response for CORS method
-        headers:
-          Access-Control-Allow-Origin:
-            schema:
-              type: string
-          Access-Control-Allow-Methods:
-            schema:
-              type: string
-          Access-Control-Allow-Headers:
-            schema:
-              type: string
-        responseModels:
-          application/json: 'Empty'
-    x-amazon-apigateway-integration:
-      type: mock
-      requestTemplates:
-        application/json: |
-          {
-            "statusCode" : 200
-          }
+      
+    options:
       responses:
-        default:
-          statusCode: "200"
-          responseParameters:
-            method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
-            method.response.header.Access-Control-Allow-Methods: '''*'''
-            method.response.header.Access-Control-Allow-Origin: '''*'''
-          responseTemplates:
-            application/json: |
-              {}
-        
-    
+        200:
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key'''
+              method.response.header.Access-Control-Allow-Methods: '''*'''
+              method.response.header.Access-Control-Allow-Origin: '''*'''
+            responseTemplates:
+              application/json: |
+                {}
