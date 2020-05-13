@@ -7,6 +7,7 @@ import datetime
 def handler(event, context):
     pk = "pk-02"
     sk= "pk-02"
+    package_id = "pk-02"
     count = 2
     customer = event['customer']
     date1 = datetime.date.today()
@@ -20,6 +21,7 @@ def handler(event, context):
     weight = int(weight1)
     mail = event['mail']
     status = "registering"
+    
     
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
@@ -36,7 +38,8 @@ def handler(event, context):
             "type": typeB,
             "weight": weight,
             "mail": mail,
-            "status": status
+            "status": status,
+            "package_id": package_id
         }    
     )
     
