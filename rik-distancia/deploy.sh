@@ -12,7 +12,7 @@ fi
 i=0 p=0 b=0 d=0
 
 CF_FILE="/tmp/cf_file.txt"
-DEPLOYMENTS_BUCKET="marii-deployments-project-testing"
+DEPLOYMENTS_BUCKET="distance-bucket-andres"
 
 case "$1" in
   -i|--install)
@@ -59,7 +59,7 @@ aws cloudformation deploy \
   --no-fail-on-empty-changeset \
   --template-file $CF_FILE \
   --parameter-overrides Project=cf_lab2  \
-  --stack-name "rik-register" \
+  --stack-name "distance-stack" \
   --capabilities CAPABILITY_NAMED_IAM
 fi
 
