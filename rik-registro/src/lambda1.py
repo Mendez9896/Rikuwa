@@ -28,13 +28,6 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
     
-    object_key = event['customer']
-    response = table.query(
-        KeyConditionExpression=Key('curstomer').begins_with(customer)
-    )
-    l = len(response['Items'])
-    
-    
     response2 = table.put_item(
         Item={
             "pk": pk,

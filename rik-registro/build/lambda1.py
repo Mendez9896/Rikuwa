@@ -11,7 +11,7 @@ def handler(event, context):
     pk = idp
     sk= idp
     package_id = idp
-    
+    count = 5
     customer = event['customer']
     date1 = datetime.date.today()
     date = date1.strftime('%m/%d/%Y')
@@ -28,19 +28,12 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
     
-    object_key = event['customer']
-    response = table.query(
-        KeyConditionExpression=Key('curstomer').begins_with(customer)
-    )
-    l = len(response['Items'])
-    
-    
     response2 = table.put_item(
         Item={
             "pk": pk,
             "sk": sk,
             "date": date,
-            "count": str(l),
+            "count": count,
             "curstomer": customer,
             "destination": destination,
             "dimension": dimension,
