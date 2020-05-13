@@ -7,12 +7,10 @@ import uuid
 
 def handler(event, context):
     idp1 = uuid.uuid1()
-    idp = str(idp1)
+    idp = "pkg-" + str(idp1)
     pk = idp
-    sk= idp
-    package_id = idp
-    count = 5
-    customer = event['customer']
+    sk= "user-" + event['customer']
+    
     date1 = datetime.date.today()
     date = date1.strftime('%m/%d/%Y')
     destination = event['destination']
@@ -28,21 +26,27 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
     
+    response = table.scan()
+    lst = []
+    for i in response['Items']:
+        lst.append(i['sk'])
+    
+    count=lst.count(sk)+1  
+    
+    
     response2 = table.put_item(
         Item={
             "pk": pk,
             "sk": sk,
-            "date": date,
-            "count": count,
-            "curstomer": customer,
-            "destination": destination,
-            "dimension": dimension,
-            "origin": origin,
-            "type": typeB,
-            "weight": weight,
-            "mail": mail,
-            "status": status,
-            "package_id": package_id
+            "Date": date,
+            "Count": count,
+            "Destination": destination,
+            "Package dimension": dimension,
+            "Origin": origin,
+            "Package type": typeB,
+            "Package weight": weight,
+            "email": mail,
+            "Status package": status,
         }    
     )
     
