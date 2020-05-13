@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  MyLambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+          RoleName: distance-lambda-role
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: "/"
+          
+          Policies:
+          - PolicyName: distance-lambda-policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                - dynamodb:*
+                - dax:*
+                Resource: "*"
+                
+  rikdistancialambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: rik-distancia-lambda
+      Description: ''
+      Handler: lambda_function.lambda_handler
+      MemorySize: 128
+      Role: !GetAtt MyLambdaRole.Arn
+      Runtime: python3.8
+      CodeUri: ./build
+      Timeout: 30
+      
+  MyTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: "api-cache-table-1"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      KeySchema:
+        - AttributeName: "origin"
+          KeyType: "HASH"
+        - AttributeName: "destination"
+          KeyType: "RANGE"
+      AttributeDefinitions:
+        - AttributeName: "origin"
+          AttributeType: "S"
+        - AttributeName: "destination"
+          AttributeType: "S"
+      
