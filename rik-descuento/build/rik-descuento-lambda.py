@@ -3,6 +3,11 @@ import json
 import boto3
 from decimal import Decimal
 from boto3.dynamodb.conditions import Key, Attr
+import decimal
+from botocore.exceptions import ClientError
+
+
+
 
 def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
@@ -42,20 +47,25 @@ def handler(event, context):
     
     precio =( (dist["Distance"]/100) + Decimal(str(max(paquete["Package weight"]*Decimal(str(0.5)),paquete["Package dimension"]/100)))) * Decimal(str((1-descuento)))
     precio = Decimal(str(precio))
-    response = pedidos.update_item(
-    Key={
-        'pk': idPack,
-        'sk': paquete['sk']
-    },
-    UpdateExpression="set Price = :r",
-    ExpressionAttributeValues={
-        ':r': precio
-    },
-    ReturnValues="UPDATED_NEW"
-)
+    try:
+        
+        update = pedidos.update_item(
+            Key={
+                'pk': idPack,
+                'sk': paquete['sk']
+            },
+            UpdateExpression="set Price = :r",
+            ExpressionAttributeValues={
+                ':r': precio
+            },
+            ReturnValues="UPDATED_NEW"
+        )
+        response = "Actualizacion correcta"
+    except ClientError as e:
+        response = "No se pudo actualizar"
     
     
     return {
         "statusCode": 200,
-        "body": response
+        "body": json.dumps(response)
     }
