@@ -1,0 +1,46 @@
+openapi: 3.0.0
+
+x-amazon-apigateway-request-validators:
+  basic:
+    validateRequestBody: false
+    validateRequestParameters: true
+
+x-amazon-apigateway-request-validator: basic
+paths:
+  /update_status:
+    get:
+      parameters:
+        - in: query
+          name: package_id
+          required: true
+          schema:
+            type: string
+      summary: Update package current status
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:update-status/invocations"
+        httpMethod: "POST"
+        
+  /get_status:
+    get:
+      parameters:
+        - in: query
+          name: package_id
+          required: true
+          schema:
+            type: string
+      summary: Get package current status
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:get-status/invocations"
+        httpMethod: "POST"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
