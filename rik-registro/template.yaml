@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform:
+  - AWS::Serverless-2016-10-31
+  
+#Parameters:
+#    BucketName:
+#        Type: String
+
+Description: my template
+Resources:
+    MyLambdaRole:
+        Type: AWS::IAM::Role
+        Properties:
+          RoleName: new-oone-project16
+          AssumeRolePolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+          Path: "/"
+          Policies:
+          - PolicyName: policy17
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                - dynamodb:*
+                - dax:*
+                Resource: "*"
+    
+    APIGatewayRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: gateway-role1
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+        Policies:
+          - PolicyName: gateway-policy4
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:*
+                  Resource: "arn:aws:logs:*:*:*"
+                - Effect: Allow
+                  Action:
+                    - lambda:InvokeFunction
+                  Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - apigateway:POST
+                  Resource: "arn:aws:apigateway:*::/restapis/*/authorizers"
+                - Effect: Allow
+                  Action:
+                    - apigateway:PATCH
+                  Resource: "arn:aws:apigateway:*::/restapis/*/authorizers/*"
+    
+    MyAPI:
+        Type: AWS::Serverless::Api
+        Properties:
+          Name: rik-registro
+          StageName: prod
+          DefinitionBody:
+            Fn::Transform:
+              Name: AWS::Include
+              Parameters:
+                Location: swagger.yaml
+          
+    MyLambdaWriting:
+        Type: AWS::Serverless::Function
+        Properties:
+            FunctionName: register
+            Runtime: python3.6
+            CodeUri: ./build
+            Handler: register.handler
+            Role: !GetAtt MyLambdaRole.Arn
+            Events:
+                PostUsers:
+                  Type: Api
+                  Properties:
+                    RestApiId: !Ref MyAPI
+                    Path: /users
+                    Method: POST
+
+
+Outputs:
+  RoleARN:
+    Value: !GetAtt MyLambdaRole.Arn

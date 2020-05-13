@@ -1,0 +1,22 @@
+openapi: 3.0.0
+
+x-amazon-apigateway-request-validators:
+  basic:
+    validateRequestBody: false
+    validateRequestParameters: true
+
+paths:
+  /descuento:
+    get:
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+      summary: This endpoint does this...
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:rik-lambda-desc/invocations"
+        httpMethod: "POST"
