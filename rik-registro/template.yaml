@@ -111,3 +111,8 @@ Resources:
             RestApiId: !Ref MyAPI
             Path: /users
             Method: POST
+
+Outputs:
+  ProdDataEndpoint:
+    Description: "API Prod stage endpoint"
+    Value: !Sub "https://${MyAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/users"
