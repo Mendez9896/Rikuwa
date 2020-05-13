@@ -72,6 +72,14 @@ Resources:
             - dynamodb:Update*
             - dynamodb:PutItem
             Resource: arn:aws:dynamodb:*:*:table/fedex
+      - PolicyName: tracking-lambda-policy-sns
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - sns:*
+            Resource: "*"
 
             
   API:
