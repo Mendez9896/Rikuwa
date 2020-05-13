@@ -5,6 +5,7 @@ x-amazon-apigateway-request-validators:
     validateRequestBody: false
     validateRequestParameters: true
 
+x-amazon-apigateway-request-validator: basic
 paths:
   /descuento:
     get:
@@ -19,4 +20,18 @@ paths:
         type: "aws_proxy"
         uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:rik-lambda-desc/invocations"
+        httpMethod: "POST"
+  /season:
+    get:
+      parameters:
+        - in: query
+          name: cant
+          type: integer
+          required: true
+          schema:
+            type: integer
+      x-amazon-apigateway-integration:
+        type: "aws_proxy"
+        uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:rik-season-lambda/invocations"
         httpMethod: "POST"
