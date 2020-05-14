@@ -22,7 +22,7 @@ def handler(event, context):
     
     package = query['Items'][0]
     
-    if package['Status package'] not in status_list:
+    if package['Statuspackage'] not in status_list:
         return {
             'statusCode': 500,
             'body': json.dumps(f"El paquete '{package_id}' tiene un estado invalido")
