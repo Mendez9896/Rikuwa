@@ -24,7 +24,7 @@ def handler(event, context):
         }
     
     package = query['Items'][0]
-    package_status = package['Status package']
+    package_status = package['Statuspackage']
     
     if package_status not in status_list:
         return {
@@ -91,7 +91,7 @@ def handler(event, context):
             'pk': package_id,
             'sk': package['sk']
         },
-        UpdateExpression="set package_status = :s, stop = :x",
+        UpdateExpression="set Statuspackage = :s, stop = :x",
         ExpressionAttributeValues={
             ':s': new_status,
             ':x': stop
