@@ -8,9 +8,10 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
     package_id = event['queryStringParameters']['package_id']
+    user_id = event['queryStringParameters']['user_id']
     
     query = table.query(
-        KeyConditionExpression=Key('pk').eq(package_id) & Key('sk').eq(package_id)
+        KeyConditionExpression=Key('pk').eq(package_id)&Key('sk').eq(user_id)
     )
     
     if 'Items' not in query or len(query['Items']) <= 0: 
@@ -21,7 +22,7 @@ def handler(event, context):
     
     package = query['Items'][0]
     
-    if package['package_status'] not in status_list:
+    if package['Status package'] not in status_list:
         return {
             'statusCode': 500,
             'body': json.dumps(f"El paquete '{package_id}' tiene un estado invalido")

@@ -8,10 +8,13 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     sns = boto3.client('sns')
     table = dynamodb.Table('fedex')
+    disttable = dynamodb.Table('api-cache-table')
+    
     package_id = event['queryStringParameters']['package_id']
+    user_id = event['queryStringParameters']['user_id']
     
     query = table.query(
-        KeyConditionExpression=Key('pk').eq(package_id) & Key('sk').eq(package_id)
+        KeyConditionExpression=Key('pk').eq(package_id)&Key('sk').eq(user_id)
     )
     
     if 'Items' not in query or len(query['Items']) <= 0: 
@@ -21,7 +24,7 @@ def handler(event, context):
         }
     
     package = query['Items'][0]
-    package_status = package['package_status']
+    package_status = package['Status package']
     
     if package_status not in status_list:
         return {
@@ -35,7 +38,7 @@ def handler(event, context):
             'body': json.dumps(package)
         }
         
-    if package_status == 'registering':
+    if package_status == status_list[0]:
         topic = sns.create_topic(
             Name= f"{package_id}-topic"
         )
@@ -48,7 +51,7 @@ def handler(event, context):
         table.update_item(
             Key={
                 'pk': package_id,
-                'sk': package_id
+                'sk': package['sk']
             },
             UpdateExpression="set topic_arn = :a",
             ExpressionAttributeValues={
@@ -56,6 +59,23 @@ def handler(event, context):
             },
             ReturnValues="UPDATED_NEW"
         )
+        
+        query = disttable.query(
+            KeyConditionExpression=Key('origin').eq(package['Origin'])&Key('destination').eq(package['Destination'])
+        )
+        
+        if len(query['Items'] <= 0):
+            stop = 'false'
+        else:
+            dist = query['Items'][0]
+            if dist['stop'] == '':
+                stop = 'false'
+            else:
+                stop = 'true'
+                
+        package['stop'] = stop
+        
+        
         
         
     
@@ -69,7 +89,7 @@ def handler(event, context):
     update = table.update_item(
         Key={
             'pk': package_id,
-            'sk': package_id
+            'sk': package['sk']
         },
         UpdateExpression="set package_status = :s, stop = :x",
         ExpressionAttributeValues={
@@ -79,7 +99,8 @@ def handler(event, context):
         ReturnValues="UPDATED_NEW"
     )
     
-    if package_status == 'registering':
+    
+    if package_status == status_list[0]:
         topic_arn = topic['TopicArn']
     else:
         topic_arn = package['topic_arn']

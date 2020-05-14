@@ -8,13 +8,10 @@ def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     sns = boto3.client('sns')
     table = dynamodb.Table('fedex')
-    disttable = dynamodb.Table('api-cache-table')
-    
-    package_id = event['queryStringParameters']['package_id']
-    user_id = event['queryStringParameters']['user_id']
+    disttable = dynamodb.Table('')
     
     query = table.query(
-        KeyConditionExpression=Key('pk').eq(package_id)&Key('sk').eq(user_id)
+        KeyConditionExpression=Key('pk').eq(package_id)
     )
     
     if 'Items' not in query or len(query['Items']) <= 0: 
@@ -24,7 +21,7 @@ def handler(event, context):
         }
     
     package = query['Items'][0]
-    package_status = package['Status package']
+    package_status = package['Status package]
     
     if package_status not in status_list:
         return {
@@ -60,23 +57,6 @@ def handler(event, context):
             ReturnValues="UPDATED_NEW"
         )
         
-        query = disttable.query(
-            KeyConditionExpression=Key('origin').eq(package['Origin'])&Key('destination').eq(package['Destination'])
-        )
-        
-        if len(query['Items'] <= 0):
-            stop = 'false'
-        else:
-            dist = query['Items'][0]
-            if dist['stop'] == '':
-                stop = 'false'
-            else:
-                stop = 'true'
-                
-        package['stop'] = stop
-        
-        
-        
         
     
     if package_status == 'enroute' and package['stop'] == 'true':
@@ -98,7 +78,6 @@ def handler(event, context):
         },
         ReturnValues="UPDATED_NEW"
     )
-    
     
     if package_status == status_list[0]:
         topic_arn = topic['TopicArn']
