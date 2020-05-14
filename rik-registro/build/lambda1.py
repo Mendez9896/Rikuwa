@@ -56,7 +56,7 @@ def handler(event, context):
     invoke_response = lambda_client.invoke(FunctionName="rik-distancia-lambda", InvocationType='Event',Payload=json.dumps(msg))
     
     msg2 = {"pk": pk }
-    invoke_response2 = lambda_client.invoke(FunctionName="rik-descuento-lambda", InvocationType='Event',Payload=json.dumps(msg2))
+    invoke_response2 = lambda_client.invoke(FunctionName="rik-lambda-desc", InvocationType='Event',Payload=json.dumps(msg2))
     return {
         "statusCode": 200,
         "body": json.dumps(response2),
