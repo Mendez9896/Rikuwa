@@ -7,7 +7,7 @@ Resources:
   MyBucket:
     Type: AWS::S3::Bucket
     Properties:
-        BucketName: rikuwa-register-package-23
+        BucketName: buckpract
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
