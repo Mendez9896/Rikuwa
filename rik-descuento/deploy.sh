@@ -12,7 +12,7 @@ fi
 i=0 p=0 b=0 d=0
 
 CF_FILE="/tmp/cf_file.txt"
-DEPLOYMENTS_BUCKET="andresbucket1"
+DEPLOYMENTS_BUCKET="joacodeployments"
 
 case "$1" in
   -i|--install)

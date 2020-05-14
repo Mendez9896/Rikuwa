@@ -42,18 +42,18 @@ Resources:
   MyTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: "api-cache-table-1"
+      TableName: "api-cache-table"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
       KeySchema:
-        - AttributeName: "origin"
+        - AttributeName: "Origin"
           KeyType: "HASH"
-        - AttributeName: "destination"
+        - AttributeName: "Destination"
           KeyType: "RANGE"
       AttributeDefinitions:
-        - AttributeName: "origin"
+        - AttributeName: "Origin"
           AttributeType: "S"
-        - AttributeName: "destination"
+        - AttributeName: "Destination"
           AttributeType: "S"
       

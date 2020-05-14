@@ -22,12 +22,12 @@ def handler(event, context):
     paquete = items["Items"][0]
     
     distItems = distancias.query(
-        KeyConditionExpression= Key('Origen').eq(paquete["Origen"]) & Key('Destino').eq(paquete["Destino"])    
+        KeyConditionExpression= Key('Origin').eq(paquete["Origin"]) & Key('Destination').eq(paquete["Destination"])    
     )
     dist = distItems["Items"][0]
     
     usuarioItem = pedidos.query(
-        KeyConditionExpression= Key('pk').eq(paquete['sk']) & Key('sk').eq(paquete['sk'])
+        KeyConditionExpression= Key('pk').eq(paquete['pk']) & Key('sk').eq(paquete['sk'])
     )
     
     usuario = usuarioItem["Items"][0]
@@ -38,9 +38,9 @@ def handler(event, context):
     
     seasonDesc = descItem["Items"][0]
     
-    if usuario["count"] > 9:
+    if usuario["Count"] > 9:
         descuento = Decimal(str(0.15))
-    elif usuario["count"] > 4:
+    elif usuario["Count"] > 4:
         descuento= Decimal(str(0.1))
     
     descuento = descuento + seasonDesc["Descuento"]

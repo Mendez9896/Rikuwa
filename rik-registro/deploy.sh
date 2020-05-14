@@ -11,9 +11,9 @@ fi
 
 i=0 p=0 b=0 d=0
 
-BUCKET_NAME=rikuwa-register-package
+BUCKET_NAME=rikuwa-register-package-joaco-joaco
 CF_FILE="/tmp/cf_file.txt"
-DEPLOYMENTS_BUCKET="marii-deployments-project-testing"
+DEPLOYMENTS_BUCKET="joacodeployments"
 
 case "$1" in
   -i|--install)
