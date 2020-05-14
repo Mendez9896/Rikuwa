@@ -11,10 +11,9 @@ def handler(event, context):
     disttable = dynamodb.Table('api-cache-table')
     
     package_id = event['queryStringParameters']['package_id']
-    user_id = event['queryStringParameters']['user_id']
     
     query = table.query(
-        KeyConditionExpression=Key('pk').eq(package_id)&Key('sk').eq(user_id)
+        KeyConditionExpression=Key('pk').eq(package_id)
     )
     
     if 'Items' not in query or len(query['Items']) <= 0: 
@@ -61,14 +60,14 @@ def handler(event, context):
         )
         
         query = disttable.query(
-            KeyConditionExpression=Key('origin').eq(package['Origin'])&Key('destination').eq(package['Destination'])
+            KeyConditionExpression=Key('Origin').eq(package['Origin'])&Key('Destination').eq(package['Destination'])
         )
         
         if len(query['Items']) <= 0:
             stop = 'false'
         else:
             dist = query['Items'][0]
-            if dist['stop'] == '':
+            if dist['Stop'] == 'none':
                 stop = 'false'
             else:
                 stop = 'true'

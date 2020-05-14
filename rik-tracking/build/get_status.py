@@ -2,16 +2,14 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 
-status_list = ['registering', 'checkout', 'packaging', 'embarking', 'enroute', 'arrival', 'delivery']
+status_list = ['registering', 'checkout', 'packaging', 'embarking', 'enroute', 'arrival', 'delivery', 'finish']
 
 def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('fedex')
     package_id = event['queryStringParameters']['package_id']
-    user_id = event['queryStringParameters']['user_id']
-    
     query = table.query(
-        KeyConditionExpression=Key('pk').eq(package_id)&Key('sk').eq(user_id)
+        KeyConditionExpression=Key('pk').eq(package_id)
     )
     
     if 'Items' not in query or len(query['Items']) <= 0: 
