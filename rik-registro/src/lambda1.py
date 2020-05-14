@@ -4,6 +4,8 @@ import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import datetime
 import uuid
+from boto3 import client as boto3_client
+
 
 def handler(event, context):
     idp1 = uuid.uuid1()
@@ -49,7 +51,9 @@ def handler(event, context):
             "Status package": status,
         }    
     )
-    
+    lambda_client = boto3_client('lambda')
+    msg = {"Origin": origin, "Destination": destination }
+    invoke_response = lambda_client.invoke(FunctionName="rik-distancia-lambda", InvocationType='Event',Payload=json.dumps(msg))
     return {
         "statusCode": 200,
         "body": json.dumps(response2),
@@ -60,3 +64,4 @@ def handler(event, context):
             "Access-Control-Allow-Credentials" : 'true'
         }
     }
+    

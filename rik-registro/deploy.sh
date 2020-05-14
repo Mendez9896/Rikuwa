@@ -12,7 +12,7 @@ fi
 i=0 p=0 b=0 d=0
 
 CF_FILE="/tmp/cf_file.txt"
-DEPLOYMENTS_BUCKET="marii-deployments-project-testing"
+DEPLOYMENTS_BUCKET="marii-deployments-project-testing-1"
 
 case "$1" in
   -i|--install)
@@ -62,7 +62,7 @@ aws cloudformation deploy \
   --stack-name "rik-register" \
   --capabilities CAPABILITY_NAMED_IAM
   
-aws s3 cp src/index.html s3://rikuwa-register-package/index.html --acl public-read-write
+aws s3 cp src/index.html s3://rikuwa-register-package-23/index.html --acl public-read-write
 fi
 
 if [[ $r -eq 1 ]]; then

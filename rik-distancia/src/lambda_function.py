@@ -7,8 +7,8 @@ import boto3
 def lambda_handler(event, context):
     
     #Obtener Origen y destino
-    origin="La paz"
-    destination="Madrid"
+    origin=event['Origin']
+    destination=event['Destination']
     final_distance=0
     api_table_name="api-cache-table"
     #Revisar si estan en la tabla api-cache-table
@@ -26,9 +26,10 @@ def lambda_handler(event, context):
     #Si estan, devolver Distance
     if 'Item' in response_api_table:
         check=response_api_table['Item']
-        final_distance=int(json.dumps(check['Distance']))
-        #print(":D")
-        
+        final_distance=int(check['Distance'])
+        res = api_table.scan()
+        body = res['Items']['Destination']
+        print(body)
     #En otro caso, utilizar la api
     else:
         response = requests.get('https://www.distance24.org/route.json?stops='+origin+'|'+destination)
@@ -62,4 +63,4 @@ def lambda_handler(event, context):
         'body': final_distance
     }
     
-lambda_handler(None, None)
+#lambda_handler(None, None)

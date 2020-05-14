@@ -7,7 +7,7 @@ Resources:
   MyBucket:
     Type: AWS::S3::Bucket
     Properties:
-        BucketName: rikuwa-register-package
+        BucketName: rikuwa-register-package-23
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
@@ -42,6 +42,8 @@ Resources:
             Action:
             - dynamodb:*
             - dax:*
+            - lambda:InvokeFunction
+            - lambda:InvokeAsync
             Resource: "*"
 
   APIGatewayRole:

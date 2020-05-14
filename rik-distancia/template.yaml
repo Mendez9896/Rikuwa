@@ -32,7 +32,6 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       FunctionName: rik-distancia-lambda
-      Description: ''
       Handler: lambda_function.lambda_handler
       MemorySize: 128
       Role: !GetAtt MyLambdaRole.Arn
