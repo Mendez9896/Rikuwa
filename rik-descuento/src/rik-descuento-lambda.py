@@ -14,7 +14,7 @@ def handler(event, context):
     pedidos= dynamodb.Table('fedex')
     distancias = dynamodb.Table('api-cache-table')
     print(event)
-    idPack = event["queryStringParameters"]["id"]
+    idPack = event["pk"]
     descuento = 0
     items = pedidos.query( 
         KeyConditionExpression= Key('pk').eq(idPack) 
