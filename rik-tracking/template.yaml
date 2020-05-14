@@ -96,7 +96,7 @@ Resources:
             - dynamodb:Delete*
             - dynamodb:Update*
             - dynamodb:PutItem
-            Resource: arn:aws:dynamodb:*:*:table/api-chache-table
+            Resource: arn:aws:dynamodb:*:*:table/api-cache-table
       - PolicyName: tracking-lambda-policy-sns
         PolicyDocument:
           Version: '2012-10-17'

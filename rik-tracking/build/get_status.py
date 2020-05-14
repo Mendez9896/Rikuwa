@@ -30,5 +30,5 @@ def handler(event, context):
     
     return {
             'statusCode': 200,
-            'body': json.dumps(package)
+            'body': json.dumps(package['Status package'])
     }

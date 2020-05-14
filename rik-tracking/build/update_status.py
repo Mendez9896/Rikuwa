@@ -35,7 +35,7 @@ def handler(event, context):
     if package_status == status_list[-1]:
         return {
             'statusCode': 200,
-            'body': json.dumps(package)
+            'body': json.dumps(package_status)
         }
         
     if package_status == status_list[0]:
@@ -64,7 +64,7 @@ def handler(event, context):
             KeyConditionExpression=Key('origin').eq(package['Origin'])&Key('destination').eq(package['Destination'])
         )
         
-        if len(query['Items'] <= 0):
+        if len(query['Items']) <= 0:
             stop = 'false'
         else:
             dist = query['Items'][0]
@@ -118,7 +118,7 @@ def handler(event, context):
     
     return {
             'statusCode': 200,
-            'body': json.dumps(package)
+            'body': json.dumps(new_status)
         }
     
     
