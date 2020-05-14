@@ -2,12 +2,16 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform:
   - AWS::Serverless-2016-10-31
 
+Parameters:
+  BucketName: 
+    Type: String
+
 Description: my template
 Resources:
   MyBucket:
     Type: AWS::S3::Bucket
     Properties:
-        BucketName: buckpract
+        BucketName: !Ref BucketName
         AccessControl: PublicRead
         WebsiteConfiguration:
           IndexDocument: index.html
@@ -111,7 +115,7 @@ Resources:
             Method: POST
 
 Outputs:
-  ProdDataEndpoint:
+  DataEndpoint:
     Description: "API Prod stage endpoint, write in line 7"
     Value: !Sub "https://${MyAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/users"
   WebsiteURL:

@@ -11,8 +11,9 @@ fi
 
 i=0 p=0 b=0 d=0
 
+BUCKET_NAME=mariana-rikuwa-register
 CF_FILE="/tmp/cf_file.txt"
-DEPLOYMENTS_BUCKET="andresbucket1"
+DEPLOYMENTS_BUCKET="marii-deployments-project-testing"
 
 case "$1" in
   -i|--install)
@@ -58,11 +59,11 @@ if [[ $d -eq 1 ]]; then
 aws cloudformation deploy \
   --no-fail-on-empty-changeset \
   --template-file $CF_FILE \
-  --parameter-overrides Project=cf_lab2  \
+  --parameter-overrides "BucketName= $BUCKET_NAME" \
   --stack-name "rik-register" \
   --capabilities CAPABILITY_NAMED_IAM
   
-aws s3 cp src/index.html s3://buckpract/index.html --acl public-read-write
+aws s3 cp src/index.html s3://$BUCKET_NAME/index.html --acl public-read-write
 fi
 
 if [[ $r -eq 1 ]]; then
