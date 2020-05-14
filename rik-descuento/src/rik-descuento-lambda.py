@@ -11,8 +11,8 @@ from botocore.exceptions import ClientError
 
 def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    pedidos= dynamodb.Table('Pedidos')
-    distancias = dynamodb.Table('Distancias')
+    pedidos= dynamodb.Table('fedex')
+    distancias = dynamodb.Table('api-cache-table')
     print(event)
     idPack = event["queryStringParameters"]["id"]
     descuento = 0

@@ -54,7 +54,7 @@ Resources:
             - dynamodb:Delete*
             - dynamodb:Update*
             - dynamodb:PutItem
-            Resource: arn:aws:dynamodb:*:*:table/Pedidos
+            Resource: arn:aws:dynamodb:*:*:table/fedex
       - PolicyName: decuento-lambda-policy2
         PolicyDocument:
           Version: '2012-10-17'
@@ -79,7 +79,7 @@ Resources:
             - dynamodb:Delete*
             - dynamodb:Update*
             - dynamodb:PutItem
-            Resource: arn:aws:dynamodb:*:*:table/Distancias
+            Resource: arn:aws:dynamodb:*:*:table/api-cache-table
             
 
   MyAPI:

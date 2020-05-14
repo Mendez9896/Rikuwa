@@ -11,10 +11,10 @@ from botocore.exceptions import ClientError
 
 def handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    pedidos= dynamodb.Table('Pedidos')
+    pedidos= dynamodb.Table('fedex')
     cant = event["queryStringParameters"]["cant"]
     desc = int(cant)/100
-    desc = Decimal(desc)
+    desc = Decimal(str(desc))
     try:
         
         update = pedidos.update_item(
