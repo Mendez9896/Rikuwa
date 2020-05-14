@@ -11,7 +11,7 @@ fi
 
 i=0 p=0 b=0 d=0
 
-BUCKET_NAME=mariana-rikuwa-register
+BUCKET_NAME=rikuwa-register-package
 CF_FILE="/tmp/cf_file.txt"
 DEPLOYMENTS_BUCKET="marii-deployments-project-testing"
 
@@ -67,5 +67,6 @@ aws s3 cp src/index.html s3://$BUCKET_NAME/index.html --acl public-read-write
 fi
 
 if [[ $r -eq 1 ]]; then
-    echo remove
+aws s3 rb s3://$BUCKET_NAME --force
+aws cloudformation delete-stack --stack-name rik-register
 fi
